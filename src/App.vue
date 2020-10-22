@@ -135,7 +135,6 @@
     </div>
   </base-container>
 
- 
   <!-- I hide this section -->
   <base-container title="Storage" v-if="StorageOpen" >
   <button @click="toggleDisplayStorage" v-if="!StorageOpen" class="toogleButton"> +</button>
@@ -170,6 +169,58 @@
     </div>
   </base-container>
 
+   <base-container title="Online Order">
+    <button @click="toggleDisplayOnlineOrder" v-if="!OnlineOrderOpen" class="toogleButton"> +</button>
+    <button @click="toggleDisplayOnlineOrder" v-else class="toogleButton"> -</button>
+    <div v-if="OnlineOrderOpen">
+      <br>
+      <center><button v-if="checkCount === 0" @click="onlineOder" class="chekDealButton">Check the Hot Deal!</button></center>
+      <div v-if="checkCount !== 0">
+        <form @submit.prevent="completeOnlinOrder">
+          <div class="form-control" >
+            <h2>Which online order should we do?</h2>
+            <h3>The price is {{randomOdds * 100}}% higher this time!</h3>
+            <h4>400% is the highest deal</h4>
+            <div>
+              <input name="online-1" type="radio" value="1" v-model="online" />
+              <label for="online-1">
+                AppleJuice: {{apple1}}. GrapeJuice: {{grape1}}. in total: 10 <br>
+                &nbsp; &nbsp; &nbsp; &nbsp;  The original price: {{og1}}$, after deal: {{odds1}}$
+              </label>
+            </div>
+            <br>
+            <div>
+              <input name="online-2" type="radio" value="2" v-model="online" />
+              <label for="online-2">
+                AppleJuice: {{apple2}}. GrapeJuice: {{grape2}}. in total: 50<br>
+                &nbsp; &nbsp; &nbsp; &nbsp;  The original price: {{og2}}$, after deal: {{odds2}}$
+              </label>
+            </div>
+            <br>
+            <div>
+              <input name="online-3" type="radio" value="3" v-model="online" />
+              <label for="online-3">
+                AppleJuice: {{apple3}}. GrapeJuice: {{grape3}}. in total: 100<br>
+                &nbsp; &nbsp; &nbsp; &nbsp;  The original price: {{og3}}$, after deal: {{odds3}}$
+              </label>
+            </div>
+            <br>
+          </div>
+          <div>
+            <button>Complete the online order</button>
+            <br><br>
+            <button @click="onlineOder" class="refreshButton">Refresh</button>
+
+          </div>
+        </form>
+      </div>
+    </div>
+  </base-container>
+
+
+
+  
+
 </template>
 
 <script>
@@ -183,7 +234,8 @@ var pouringAudio = new Audio('/audio/pouring.mp3')
 var letmeseeAudio = new Audio('/audio/hmm.wav')
 var machineAudio = new Audio('/audio/machine.wav')
 var sighAudio = new Audio('/audio/sigh.wav')
-
+var onlineOrderAudio = new Audio('/audio/onlineOrder.wav')
+var honkAudio = new Audio('/audio/honkAudio.wav')
 
 export default{
   data(){
@@ -192,6 +244,7 @@ export default{
       FactoryOpen: false,
       StorageOpen: false,
       StoreOpen: false,
+      OnlineOrderOpen: false,
       money: 100,
       appleCount: 5,
       appleJuiceCount: 3,
@@ -207,6 +260,24 @@ export default{
 
       machineCount: 1,
       checking: false,
+
+      randomNum: null,
+      randomOdds: null,
+      online: null,
+      checkCount: 0,
+  
+      apple1: null,
+      grape1: null,
+      og1: null,
+      odds1: null,
+      apple2: null,
+      grape2: null,
+      og2: null,
+      odds2: null,
+      apple3: null,
+      grape3: null,
+      og3: null,
+      odds3: null,
     }
   },
   components: {
@@ -228,6 +299,12 @@ export default{
     toggleDisplayStore(){
       this.StoreOpen = !this.StoreOpen
     },  
+    toggleDisplayOnlineOrder(){
+      this.OnlineOrderOpen = !this.OnlineOrderOpen
+      // if(this.OnlineOrderOpen){
+      //   this.onlineOder();
+      // }
+    }, 
     buyItem(num){
       if(this.market !== null){
         if(this.market === 'apple'){
@@ -282,6 +359,53 @@ export default{
           }
         }
         this.sell = null;
+    },
+    completeOnlinOrder(){
+      if(this.online === '1'){
+          if(this.appleJuiceCount < this.apple1 || this.grapeJuiceCount < this.grape1){
+            nopeAudio.play()
+            alert(`You don't have enough items`)
+          }else{
+            this.appleJuiceCount = this.appleJuiceCount - this.apple1;
+            this.grapeJuiceCount = this.grapeJuiceCount - this.grape1;
+            this.money = this.money + this.odds1;
+            honkAudio.play();
+            setTimeout(this.delayedTrack, 900)
+            setTimeout(this.delayedPaid, 3750)
+          }
+        }else if(this.online === '2'){
+          if(this.appleJuiceCount < this.apple2 || this.grapeJuiceCount < this.grape2){
+            nopeAudio.play()
+            alert(`You don't have enough items`)
+          }else{
+            this.appleJuiceCount = this.appleJuiceCount - this.apple2;
+            this.grapeJuiceCount = this.grapeJuiceCount - this.grape2;
+            this.money = this.money + this.odds2;
+            honkAudio.play();
+            setTimeout(this.delayedTrack, 900)
+            setTimeout(this.delayedPaid, 3750)
+          }
+        }else if(this.online === '3'){
+          if(this.appleJuiceCount < this.apple3 || this.grapeJuiceCount < this.grape3){
+            nopeAudio.play()
+            alert(`You don't have enough items`)
+          }else{
+            this.appleJuiceCount = this.appleJuiceCount - this.apple3;
+            this.grapeJuiceCount = this.grapeJuiceCount - this.grape3;
+            this.money = this.money + this.odds3;
+            honkAudio.play();
+            setTimeout(this.delayedTrack, 900)
+            setTimeout(this.delayedPaid, 3750)
+            
+          }
+        }
+        this.online = null;
+    },
+    delayedPaid(){
+      getPaidALotAudio.play()
+    },
+    delayedTrack(){
+      onlineOrderAudio.play()
     },
     buyMachine(price){
       if(this.money >= price){
@@ -339,7 +463,44 @@ export default{
         }
         this.mix = null;
     },
-    
+    onlineOder(){
+      this.checkCount ++;
+      this.randomOdds=  Math.random();
+      if(this.randomOdds <= 0.4){
+        this.randomOdds = 1.5
+      }else if(this.randomOdds <= 0.8){
+        this.randomOdds = 2
+      }else if(this.randomOdds <= 0.95){
+        this.randomOdds = 2.5
+      }else {
+        this.randomOdds = 4
+      }
+
+
+      this.randomNum = Math.random();
+      this.apple1 = Math.floor((10 * this.randomNum) )
+      this.grape1 = 10 - this.apple1;
+      this.og1 = (this.apple1 * 3) + (this.grape1 * 5)
+      this.odds1 = this.og1 * this.randomOdds
+
+
+
+      this.randomNum = Math.random();
+      this.apple2 = Math.floor((50 * this.randomNum) )
+      this.grape2 = 50 - this.apple2;
+      this.og2 = (this.apple2 * 3) + (this.grape2 * 5)
+      this.odds2 = this.og2 * this.randomOdds
+
+
+
+      this.randomNum = Math.random();
+      this.apple3 = Math.floor((100* this.randomNum) )
+      this.grape3 = 100 - this.apple3;
+      this.og3 = (this.apple3 * 3) + (this.grape3 * 5)
+      this.odds3 = this.og3 * this.randomOdds
+
+      
+    }
   },
 };
 </script>
@@ -356,6 +517,14 @@ html {
 .buyList {
   border: 1px solid #0076bb;
   background-color: grey;
+}
+.chekDealButton{
+  background-color: red;
+  
+}
+
+.refreshButton{
+  background-color: lightslategray;
 }
 
 .toogleButton {
