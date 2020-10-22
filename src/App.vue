@@ -8,28 +8,47 @@
       Apple Juice: {{appleJuiceCount}}, Grape Juice: {{grapeJuiceCount}}
       <br>
       <br>
-      <button @click="giveMoney"> Give me money</button>
-      <button @click="freeMoney(10000)"> Free 10000</button>
+      <button @click="giveMoney"> Give me money</button>&nbsp;
+      <button @click="freeMoney(1000000)"> Free 1000000</button>
       
     </center>
   </base-container>
 
 
   <base-container title="Market" >
-    <button @click="toggleDisplayMarket" v-if="!MarketOpen"> +</button>
-    <button @click="toggleDisplayMarket" v-else>-</button>
+    <button @click="toggleDisplayMarket" v-if="!MarketOpen" class="toogleButton"> +</button>
+    <button @click="toggleDisplayMarket" v-else class="toogleButton">-</button>
     <div v-if="MarketOpen">
-      <br>
-      <button @click="buyItem(2,'apple')">Apple(2 $)</button>
-      <button @click="buyItem(3,'grape')">Grape(3 $)</button>
-      <button @click="buyItem(1,'water')">Water(1 $)</button>
-      <button @click="buyItem(0.5,'suger')">Suger(50 cents)</button>
+      <form @submit.prevent="buyItem">
+        <div class="form-control">
+          <h2>What do you want to buy?</h2>
+          <div>
+            <input name="market-apple" type="radio" value="apple" v-model="market" />
+            <label for="market-apple">Apple(2 $)</label>
+          </div>
+          <div>
+            <input name="market-grape" type="radio" value="grape" v-model="market" />
+            <label for="market-grape">Grape(3 $)</label>
+          </div>
+        </div>
+        <div>
+            <button @click="buyItem(1)">Buy 1</button>&nbsp;
+            <button @click="buyItem(2)">2</button>&nbsp;
+            <button @click="buyItem(5)">5</button>&nbsp;
+            <br>
+            <button @click="buyItem(10)">10</button>&nbsp;
+            <button @click="buyItem(25)">25</button>&nbsp;
+            <button @click="buyItem(50)">50</button>&nbsp;
+            <button @click="buyItem(100)">100</button>&nbsp;
+        </div>
+      </form>
     </div>
+
   </base-container>
 
-  <base-container title="Factory" >
-    <button @click="toggleDisplayFactory" v-if="!FactoryOpen"> +</button>
-    <button @click="toggleDisplayFactory" v-else> -</button>
+  <base-container :title="'Factory Lv.' + machineCount" >
+    <button @click="toggleDisplayFactory" v-if="!FactoryOpen" class="toogleButton"> +</button>
+    <button @click="toggleDisplayFactory" v-else class="toogleButton"> -</button>
     <div v-if="FactoryOpen">
       <form @submit.prevent="makeDrink">
         <div class="form-control">
@@ -44,10 +63,73 @@
           </div>
         </div>
         <div>
-          <button @click="makeDrink(1)">Make 1</button>
-          <button @click="makeDrink(2)">Make 2</button>
-          <br><br>
-          <button v-if="machineCount === 1" @click="buyMachine(500)" class="buyList">Unlock the better machine(3 from 2!  500$)</button>
+          <div v-if="machineCount === 1">
+            <button @click="makeDrink(1,4)">Make 1 from 4</button>&nbsp;
+            <button @click="makeDrink(2,4)">2</button>&nbsp;
+            <button @click="makeDrink(5,4)">5</button>&nbsp;
+            <br>
+            <button @click="makeDrink(10,4)">10</button>&nbsp;
+            <button @click="makeDrink(25,4)">25</button>&nbsp;
+            <button @click="makeDrink(50,4)">50</button>&nbsp;
+            <button @click="makeDrink(100,4)">100</button>&nbsp;
+            
+            <br><br>
+            <button @click="buyMachine(500)" class="buyList">Unlock the better machine(1 from 3!  500$)</button>
+          </div>
+          <div v-if="machineCount === 2">
+            <button @click="makeDrink(1,3)">Make 1 from 3</button>&nbsp;
+            <button @click="makeDrink(2,3)">2</button>&nbsp;
+            <button @click="makeDrink(5,3)">5</button>&nbsp;
+            <br>
+            <button @click="makeDrink(10,3)">10</button>&nbsp;
+            <button @click="makeDrink(25,3)">25</button>&nbsp;
+            <button @click="makeDrink(50,3)">50</button>&nbsp;
+            <button @click="makeDrink(100,3)">100</button>&nbsp;
+
+            <br><br>
+            <button  @click="buyMachine(2000)" class="buyList">Unlock the better machine(1 from 2!  2000$)</button>
+          </div>
+          <div v-if="machineCount === 3">
+            <button @click="makeDrink(1,2)">Make 1 from 2</button>&nbsp;
+            <button @click="makeDrink(2,2)">2</button>&nbsp;
+            <button @click="makeDrink(5,2)">5</button>&nbsp;
+            <br>
+            <button @click="makeDrink(10,2)">10</button>&nbsp;
+            <button @click="makeDrink(25,2)">25</button>&nbsp;
+            <button @click="makeDrink(50,2)">50</button>&nbsp;
+            <button @click="makeDrink(100,2)">100</button>&nbsp;
+
+            <br><br>
+            <button  @click="buyMachine(50000)" class="buyList">Unlock the better machine(1 from 1!  50000$)</button>
+          </div>
+          <div v-if="machineCount === 4">
+            <button @click="makeDrink(1,1)">Make 1 from 1</button>&nbsp;
+            <button @click="makeDrink(2,1)">2</button>&nbsp;
+            <button @click="makeDrink(5,1)">5</button>&nbsp;
+            <br>
+            <button @click="makeDrink(10,1)">10</button>&nbsp;
+            <button @click="makeDrink(25,1)">25</button>&nbsp;
+            <button @click="makeDrink(50,1)">50</button>&nbsp;
+            <button @click="makeDrink(100,1)">100</button>&nbsp;
+
+            <br><br>
+            <button  @click="buyMachine(100000)" class="buyList">Unlock the better machine(2 from 1!  100000$)</button>
+          </div>
+          <div v-if="machineCount === 5">
+            <button @click="makeDrink(1,0.5)">Make 1 from 0.5</button>&nbsp;
+            <button @click="makeDrink(2,0.5)">2</button>&nbsp;
+            <button @click="makeDrink(5,0.5)">5</button>&nbsp;
+            <br>
+            <button @click="makeDrink(10,0.5)">10</button>&nbsp;
+            <button @click="makeDrink(25,0.5)">25</button>&nbsp;
+            <button @click="makeDrink(50,0.5)">50</button>&nbsp;
+            <button @click="makeDrink(100,0.5)">100</button>&nbsp;
+
+            <br><br>
+            <button v-if="machineCount === 5"> you rich dude</button>
+            <!-- <button  @click="buyMachine(100000)" class="buyList">Unlock the better machine(2 from 1!  100000$)</button> -->
+          </div>
+          
         </div>
       </form>
     </div>
@@ -56,13 +138,13 @@
  
   <!-- I hide this section -->
   <base-container title="Storage" v-if="StorageOpen" >
-  <button @click="toggleDisplayStorage" v-if="!StorageOpen"> +</button>
-  <button @click="toggleDisplayStorage" v-else> -</button>
+  <button @click="toggleDisplayStorage" v-if="!StorageOpen" class="toogleButton"> +</button>
+  <button @click="toggleDisplayStorage" v-else class="toogleButton"> -</button>
   </base-container>
 
   <base-container title="Store">
-    <button @click="toggleDisplayStore" v-if="!StoreOpen"> +</button>
-    <button @click="toggleDisplayStore" v-else> -</button>
+    <button @click="toggleDisplayStore" v-if="!StoreOpen" class="toogleButton"> +</button>
+    <button @click="toggleDisplayStore" v-else class="toogleButton"> -</button>
     <div v-if="StoreOpen">
       <form @submit.prevent="sellMultiple">
         <div class="form-control">
@@ -93,11 +175,6 @@
 <script>
 import BaseContainer from './components/BaseContainer.vue';
 
-// import TheForm from './components/TheForm.vue'
-// import TheCounter from './components/TheCounter.vue';
-// import ChangeCounter from './components/ChangeCounter.vue';
-// import FavoriteValue from './components/FavoriteValue.vue';
-
 var spendAudio = new Audio('/audio/spend.wav')
 var getPaidAudio = new Audio('/audio/getPaid.wav')
 var getPaidALotAudio = new Audio('/audio/getPaidAlot.wav')
@@ -108,8 +185,6 @@ var machineAudio = new Audio('/audio/machine.wav')
 var sighAudio = new Audio('/audio/sigh.wav')
 
 
-
-
 export default{
   data(){
     return{
@@ -117,7 +192,7 @@ export default{
       FactoryOpen: false,
       StorageOpen: false,
       StoreOpen: false,
-      money: 250,
+      money: 100,
       appleCount: 5,
       appleJuiceCount: 3,
       grapeCount: 5,
@@ -126,17 +201,16 @@ export default{
       SugerCount: 2,
       mix: null,
       sell: null,
+      market: null,
       num : null,
+      marketPrice: null,
+
       machineCount: 1,
       checking: false,
     }
   },
   components: {
     BaseContainer,
-    // TheForm,
-    // TheCounter,
-    // ChangeCounter,
-    // FavoriteValue,
   },
   methods: {
     isMarketOpen() {
@@ -154,23 +228,37 @@ export default{
     toggleDisplayStore(){
       this.StoreOpen = !this.StoreOpen
     },  
-    buyItem(price,item){
-      if(this.money - price >= 0){
-        this.money = this.money - price;
-        if(item === 'apple'){
-          this.appleCount++;
-        }else if(item === 'grape'){
-          this.grapeCount ++;
-        }else if(item === 'water'){
-          this.WaterCount++;
-        }else if(item === 'suger'){
-          this.SugerCount++;
+    buyItem(num){
+      if(this.market !== null){
+        if(this.market === 'apple'){
+          this.marketPrice = 2
+        }else if(this.market === 'grape'){
+          this.marketPrice = 3
+        }else if(this.market === 'water'){
+          this.marketPrice = 1
+        }else if(this.market === 'suger'){
+          this.marketPrice = 0.5
         }
-        spendAudio.play();
-      }
-      else{
-        nopeAudio.play()
-        alert("get your broke ass out this market")
+
+        if(this.money - (this.marketPrice * num) >= 0){
+          this.money = this.money - (this.marketPrice * num);
+          if(this.market === 'apple'){
+            this.appleCount = this.appleCount + num;
+          }else if(this.market === 'grape'){
+            this.grapeCount = this.grapeCount + num;
+          }else if(this.market === 'water'){
+            this.WaterCount = this.grapeCount + num
+          }else if(this.market === 'suger'){
+            this.SugerCount = this.SugerCount + num
+          }
+          spendAudio.play();
+          console.log('thanks for buying it')
+        }else{
+          nopeAudio.play()
+          alert("get your broke ass out this market")
+          console.log('nooooope')
+        }
+        this.market = null;
       }
     },
     sellMultiple(multipleNum){
@@ -229,22 +317,22 @@ export default{
     freeMoney(price){
       this.money = this.money + price
     },
-    makeDrink(num){
+    makeDrink(num,price){
       if(this.mix === 'appleJuice'){
-          if(this.appleCount < num){
+          if(this.appleCount < (num * price)){
             nopeAudio.play()
-            alert(`You don't have enough ingredients!`)
+            alert(`You need ${num * price} apples!`)
           }else{
-            this.appleCount = this.appleCount - num
+            this.appleCount = this.appleCount - (num * price)
             this.appleJuiceCount =this.appleJuiceCount + num
             pouringAudio.play();
           }
         }else if(this.mix === 'grapeJuice'){
-          if(this.grapeCount < num){
+          if(this.grapeCount < (num * price)){
             nopeAudio.play()
-            alert(`You don't have enough ingredients!`)
+            alert(`You need ${num * price} grapes`)
           }else{
-            this.grapeCount = this.grapeCount - num;
+            this.grapeCount = this.grapeCount - (num * price)
             this.grapeJuiceCount = this.grapeJuiceCount + num
             pouringAudio.play();
           }
@@ -268,6 +356,11 @@ html {
 .buyList {
   border: 1px solid #0076bb;
   background-color: grey;
+}
+
+.toogleButton {
+  border: 1px solid green;
+  background-color: green;
 }
 
 body {
