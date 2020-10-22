@@ -3,13 +3,15 @@
     <center>You have {{money}} $ now</center>
     <br>
     <center>
-      Apple: {{appleCount}}, Grape: {{grapeCount}}, Water: {{WaterCount}}, Suger: {{SugerCount}}
+      Apple: {{appleCount}}, Grape: {{grapeCount}}
+       <!-- Water: {{WaterCount}}, Suger: {{SugerCount}} -->
       <br>
       Apple Juice: {{appleJuiceCount}}, Grape Juice: {{grapeJuiceCount}}
       <br>
       <br>
-      <button @click="giveMoney"> Give me money</button>&nbsp;
-      <button @click="freeMoney(1000000)"> Free 1000000</button>
+      <button @click="giveMoney"> Give me money (0.25$ - 2.0$)</button>&nbsp;
+      <br><br>
+      <button @click="freeMoney(1000000)"> Free 1000000$ (This will break the balance for sho tho)</button>
       
     </center>
   </base-container>
@@ -24,11 +26,11 @@
           <h2>What do you want to buy?</h2>
           <div>
             <input name="market-apple" type="radio" value="apple" v-model="market" />
-            <label for="market-apple">Apple(2 $)</label>
+            <label for="market-apple">Apple(0.5 $)</label>
           </div>
           <div>
             <input name="market-grape" type="radio" value="grape" v-model="market" />
-            <label for="market-grape">Grape(3 $)</label>
+            <label for="market-grape">Grape(0.75 $)</label>
           </div>
         </div>
         <div>
@@ -308,9 +310,9 @@ export default{
     buyItem(num){
       if(this.market !== null){
         if(this.market === 'apple'){
-          this.marketPrice = 2
+          this.marketPrice = 0.5
         }else if(this.market === 'grape'){
-          this.marketPrice = 3
+          this.marketPrice = 0.75
         }else if(this.market === 'water'){
           this.marketPrice = 1
         }else if(this.market === 'suger'){
@@ -372,6 +374,7 @@ export default{
             honkAudio.play();
             setTimeout(this.delayedTrack, 900)
             setTimeout(this.delayedPaid, 3750)
+            this.onlineOder();
           }
         }else if(this.online === '2'){
           if(this.appleJuiceCount < this.apple2 || this.grapeJuiceCount < this.grape2){
@@ -384,6 +387,7 @@ export default{
             honkAudio.play();
             setTimeout(this.delayedTrack, 900)
             setTimeout(this.delayedPaid, 3750)
+            this.onlineOder();
           }
         }else if(this.online === '3'){
           if(this.appleJuiceCount < this.apple3 || this.grapeJuiceCount < this.grape3){
@@ -396,6 +400,7 @@ export default{
             honkAudio.play();
             setTimeout(this.delayedTrack, 900)
             setTimeout(this.delayedPaid, 3750)
+            this.onlineOder();
             
           }
         }
@@ -428,12 +433,12 @@ export default{
     giveMoney(){
       this.num = Math.random()
       if(this.num <= 0.25){
-        this.money = this.money + 0.5
+        this.money = this.money + 0.2
         
       }else if(this.num <= 0.5){
-        this.money = this.money + 1
+        this.money = this.money + 0.5
       }else if(this.num <= 0.75){
-        this.money = this.money + 1.5
+        this.money = this.money + 0.75
       }else{
         this.money = this.money + 2
       }
