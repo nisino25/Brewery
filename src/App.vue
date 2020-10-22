@@ -53,7 +53,7 @@
     </div>
   </base-container>
 
-
+ 
   <!-- I hide this section -->
   <base-container title="Storage" v-if="StorageOpen" >
   <button @click="toggleDisplayStorage" v-if="!StorageOpen"> +</button>
