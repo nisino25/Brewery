@@ -10,3 +10,5 @@ app.use(store);
 app.mount('#app');
 
 
+
+document.title= 'Brewery Factory'

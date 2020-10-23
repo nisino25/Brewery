@@ -1,4 +1,5 @@
 <template>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
   <base-container>
     <center>You have {{money}} $ now</center>
     <br>
@@ -9,21 +10,22 @@
       Apple Juice: {{appleJuiceCount}}, Grape Juice: {{grapeJuiceCount}}
       <br>
       <br>
-      <button @click="giveMoney"> Give me money (0.25$ - 2.0$)</button>&nbsp;
+      <button @click="giveMoney" class="moneyButton"> Give me money (0.25$ - 2.0$)</button>&nbsp;
       <br><br>
-      <button @click="freeMoney(1000000)"> Free 1000000$ (This will break the balance for sho tho)</button>
+      <button @click="freeMoney(1000000)" class="moneyButton"> Free 1000000$ (This will break the balance for sho tho)</button>
       
     </center>
   </base-container>
 
 
   <base-container title="Market" >
+  <i class="fas fa-store"></i>
     <button @click="toggleDisplayMarket" v-if="!MarketOpen" class="toogleButton"> +</button>
     <button @click="toggleDisplayMarket" v-else class="toogleButton">-</button>
     <div v-if="MarketOpen">
       <form @submit.prevent="buyItem">
         <div class="form-control">
-          <h2>What do you want to buy?</h2>
+          <h2>What do you want to buy? </h2> 
           <div>
             <input name="market-apple" type="radio" value="apple" v-model="market" />
             <label for="market-apple">Apple(0.5 $)</label>
@@ -34,6 +36,7 @@
           </div>
         </div>
         <div>
+            
             <button @click="buyItem(1)">Buy 1</button>&nbsp;
             <button @click="buyItem(2)">2</button>&nbsp;
             <button @click="buyItem(5)">5</button>&nbsp;
@@ -42,8 +45,15 @@
             <button @click="buyItem(25)">25</button>&nbsp;
             <button @click="buyItem(50)">50</button>&nbsp;
             <button @click="buyItem(100)">100</button>&nbsp;
+            <br>
+            <button @click="buyItem(200)">200</button>&nbsp;
+            <button @click="buyItem(300)">300</button>&nbsp;
+            <button @click="buyItem(400)">400</button>&nbsp;
+            <button @click="buyItem(500)">500</button>&nbsp;
+            <button @click="buyItem(1000)">1000</button>&nbsp;
         </div>
       </form>
+      <button @click="buyMax">Buy Max</button><br><br>
     </div>
 
   </base-container>
@@ -64,6 +74,8 @@
             <label for="mix-grape">Grape juice</label>
           </div>
         </div>
+        <button @click="makeMaxDrink">Make max count out of it</button>
+        <br><br>
         <div>
           <div v-if="machineCount === 1">
             <button @click="makeDrink(1,4)">Make 1 from 4</button>&nbsp;
@@ -168,15 +180,18 @@
 
         </div>
       </form>
+        <button @click="sellAll(1)">Sell all Apple Juice</button>&nbsp;
+        <button @click="sellAll(2)">Sell all Grape Juice</button>&nbsp;
+        <button @click="sellAll(0)">Sell all Everything</button>
     </div>
   </base-container>
 
-   <base-container title="Online Order">
+  <base-container title="Online Order">
     <button @click="toggleDisplayOnlineOrder" v-if="!OnlineOrderOpen" class="toogleButton"> +</button>
     <button @click="toggleDisplayOnlineOrder" v-else class="toogleButton"> -</button>
     <div v-if="OnlineOrderOpen">
       <br>
-      <center><button v-if="checkCount === 0" @click="onlineOder" class="chekDealButton">Check the Hot Deal!</button></center>
+      <center><button v-if="checkCount === 0" @click="catering" class="chekDealButton">Unlock the catering order with better deal! (2000$)</button></center>
       <div v-if="checkCount !== 0">
         <form @submit.prevent="completeOnlinOrder">
           <div class="form-control" >
@@ -188,6 +203,7 @@
               <label for="online-1">
                 AppleJuice: {{apple1}}. GrapeJuice: {{grape1}}. in total: 10 <br>
                 &nbsp; &nbsp; &nbsp; &nbsp;  The original price: {{og1}}$, after deal: {{odds1}}$
+                <br>&nbsp; &nbsp; &nbsp; &nbsp; The cost: {{cost1}}$, the pure profit is: {{pureProfit1}}$
               </label>
             </div>
             <br>
@@ -196,6 +212,8 @@
               <label for="online-2">
                 AppleJuice: {{apple2}}. GrapeJuice: {{grape2}}. in total: 50<br>
                 &nbsp; &nbsp; &nbsp; &nbsp;  The original price: {{og2}}$, after deal: {{odds2}}$
+                <br>&nbsp; &nbsp; &nbsp; &nbsp; The cost: {{cost2}}$, the pure profit is: {{pureProfit2}}$
+                
               </label>
             </div>
             <br>
@@ -204,6 +222,34 @@
               <label for="online-3">
                 AppleJuice: {{apple3}}. GrapeJuice: {{grape3}}. in total: 100<br>
                 &nbsp; &nbsp; &nbsp; &nbsp;  The original price: {{og3}}$, after deal: {{odds3}}$
+                <br>&nbsp; &nbsp; &nbsp; &nbsp; The cost: {{cost3}}$, the pure profit is: {{pureProfit3}}$
+              </label>
+            </div>
+            <br>
+            <div>
+              <input name="online-4" type="radio" value="4" v-model="online" />
+              <label for="online-4">
+                AppleJuice: {{apple4}}. GrapeJuice: {{grape4}}. in total: 250 <br>
+                &nbsp; &nbsp; &nbsp; &nbsp;  The original price: {{og4}}$, after deal: {{odds4}}$
+                <br>&nbsp; &nbsp; &nbsp; &nbsp; The cost: {{cost4}}$, the pure profit is: {{pureProfit4}}$
+              </label>
+            </div>
+            <br>
+            <div>
+              <input name="online-5" type="radio" value="5" v-model="online" />
+              <label for="online-5">
+                AppleJuice: {{apple5}}. GrapeJuice: {{grape5}}. in total: 500 <br>
+                &nbsp; &nbsp; &nbsp; &nbsp;  The original price: {{og5}}$, after deal: {{odds5}}$
+                <br>&nbsp; &nbsp; &nbsp; &nbsp; The cost: {{cost5}}$, the pure profit is: {{pureProfit5}}$
+              </label>
+            </div>
+            <br>
+            <div>
+              <input name="online-6" type="radio" value="6" v-model="online" />
+              <label for="online-6">
+                AppleJuice: {{apple6}}. GrapeJuice: {{grape6}}. in total: 1000 <br>
+                &nbsp; &nbsp; &nbsp; &nbsp;  The original price: {{og6}}$, after deal: {{odds6}}$
+                <br>&nbsp; &nbsp; &nbsp; &nbsp; The cost: {{cost6}}$, the pure profit is: {{pureProfit6}}$
               </label>
             </div>
             <br>
@@ -211,7 +257,7 @@
           <div>
             <button>Complete the online order</button>
             <br><br>
-            <button @click="onlineOder" class="refreshButton">Refresh</button>
+            <button @click="refresh" class="refreshButton">Pay 5$ to refresh the deal!</button>
 
           </div>
         </form>
@@ -219,11 +265,63 @@
     </div>
   </base-container>
 
+  <base-container>
+    <center>You have {{money}} $ now</center>
+    <br>
+    <center>
+      Apple: {{appleCount}}, Grape: {{grapeCount}}
+       <!-- Water: {{WaterCount}}, Suger: {{SugerCount}} -->
+      <br>
+      Apple Juice: {{appleJuiceCount}}, Grape Juice: {{grapeJuiceCount}}
+      <br>
+      <br>
+      <button @click="giveMoney" class="moneyButton"> Give me money (0.25$ - 2.0$)</button>&nbsp;
+      <br><br>
+      <button @click="freeMoney(1000000)" class="moneyButton"> Free 1000000$ (This will break the balance for sho tho)</button>
+      
+    </center>
+  </base-container>
 
+  <base-container title="Cheating Box">
+    <button @click="toggleDisplayCheatin" v-if="!Cheatingopen" class="toogleButton"> +</button>
+    <button @click="toggleDisplayCheatin" v-else class="toogleButton"> -</button>
+    <div v-if="Cheatingopen">
+      <form @submit.prevent="sellMultiple">
+        <div class="form-control">
+          <h2>Wassup cheater</h2>
+          <div>
+            <input name="cheat-apple" type="radio" value="appleJuice" v-model="cheat" />
+            <label for="cheat-apple">Apple Juice</label>
+          </div>
+          <div> 
+            <input name="cheat-grape" type="radio" value="grapeJuice" v-model="cheat" />
+            <label for="cheat-grape">Grape Juice</label>
+          </div>
+          <div> 
+            <input name="cheat-money" type="radio" value="money" v-model="cheat" />
+            <label for="cheat-money">Money</label>
+          </div>
+        </div>
+        <div>
+          <button @click="cheatingGame(1)">1</button>&nbsp;
+          <button @click="cheatingGame(5)">5</button>&nbsp;
+          <button @click="cheatingGame(10)">10</button>&nbsp;
+          <button @click="cheatingGame(25)">25</button>&nbsp;
+          <button @click="cheatingGame(50)">50</button>&nbsp;
+          <br><br>
+          <button @click="cheatingGame(100)">100</button>&nbsp;
+          <button @click="cheatingGame(200)">200</button>&nbsp;
+          <button @click="cheatingGame(500)">500</button>&nbsp;
+          <button @click="cheatingGame(1000)">1000</button>&nbsp;
+          <button @click="cheatingGame(10000)">10000</button>&nbsp;
 
-  
+        </div>
+      </form>
+    </div>
+  </base-container>
 
 </template>
+
 
 <script>
 import BaseContainer from './components/BaseContainer.vue';
@@ -238,6 +336,7 @@ var machineAudio = new Audio('/audio/machine.wav')
 var sighAudio = new Audio('/audio/sigh.wav')
 var onlineOrderAudio = new Audio('/audio/onlineOrder.wav')
 var honkAudio = new Audio('/audio/honkAudio.wav')
+var cheatingAudio = new Audio('/audio/cheating.wav')
 
 export default{
   data(){
@@ -247,6 +346,7 @@ export default{
       StorageOpen: false,
       StoreOpen: false,
       OnlineOrderOpen: false,
+      Cheatingopen: false,
       money: 100,
       appleCount: 5,
       appleJuiceCount: 3,
@@ -272,14 +372,60 @@ export default{
       grape1: null,
       og1: null,
       odds1: null,
+      pureProfit1: null,
+      cost1: null,
       apple2: null,
       grape2: null,
       og2: null,
       odds2: null,
+      pureProfit2: null,
+      cost2: null,
       apple3: null,
       grape3: null,
       og3: null,
       odds3: null,
+      pureProfit3: null,
+      cost3: null,
+      
+      apple4: null,
+      grape4: null,
+      og4: null,
+      odds4: null,
+      pureProfit4: null,
+      cost4: null,
+
+      apple5: null,
+      grape5: null,
+      og5: null,
+      odds5: null,
+      pureProfit5: null,
+      cost5: null,
+      
+      apple6: null,
+      grape6: null,
+      og6: null,
+      odds6: null,
+      pureProfit6: null,
+      cost6: null,
+
+
+      levelCal: null,
+
+      cheat: null,
+
+      MaxApple: null,
+      MaxGrape: null,
+      MaxConfirm: false,
+
+      MaxMarket: null,
+      confirmMarket: false,
+
+      countRandom: 0,
+
+      sellConfirm: false,
+      sellAllPrice: 0,
+
+      cateringCheck: false,
     }
   },
   components: {
@@ -303,12 +449,55 @@ export default{
     },  
     toggleDisplayOnlineOrder(){
       this.OnlineOrderOpen = !this.OnlineOrderOpen
-      // if(this.OnlineOrderOpen){
-      //   this.onlineOder();
-      // }
     }, 
-    buyItem(num){
+    toggleDisplayCheatin(){
+      this.Cheatingopen = !this.Cheatingopen
+    }, 
+    buyMax(){
       if(this.market !== null){
+        if(this.market === 'apple'){
+          if(this.money >= 0.5){
+            this.marketPrice = 0.5
+            this.MaxMarket = Math.floor(this.money / this.marketPrice)
+            this.confirmMarket = confirm(`Would you like to buy ${this.MaxMarket} ${this.market}  with ${this.MaxMarket * this.marketPrice}$ ?`)
+            if(this.confirmMarket){
+              this.appleCount = this.appleCount + this.MaxMarket
+              this.money = this.money - (this.MaxMarket * this.marketPrice)
+              spendAudio.play()
+              setTimeout(this.delayedMarket, 750)
+              setTimeout(this.delayedMarket, 1500)
+
+            }else{
+              sighAudio.play();
+            }
+          }else{
+            nopeAudio.play()
+            alert("get your broke ass out this market")
+          }
+        }else if(this.market === 'grape'){
+          if(this.money >= 0.75){
+            this.marketPrice = 0.75
+            this.MaxMarket = Math.floor(this.money / this.marketPrice)
+            this.confirmMarket = confirm(`Would you like to buy ${this.MaxMarket} ${this.market}  with ${this.MaxMarket * this.marketPrice}$ ?`)
+            if(this.confirmMarket){
+              this.grapeCount = this.grapeCount + this.MaxMarket
+              this.money = this.money - (this.MaxMarket * this.marketPrice)
+              spendAudio.play()
+              setTimeout(this.delayedMarket, 750)
+              setTimeout(this.delayedMarket, 1500)
+            }else{
+              sighAudio.play();
+            }
+          }else{
+            nopeAudio.play()
+            alert("get your broke ass out this market")
+          }
+        }
+      }
+    },  
+    buyItem(num){
+      if(num){
+        if(this.market !== null){
         if(this.market === 'apple'){
           this.marketPrice = 0.5
         }else if(this.market === 'grape'){
@@ -318,6 +507,8 @@ export default{
         }else if(this.market === 'suger'){
           this.marketPrice = 0.5
         }
+        
+
 
         if(this.money - (this.marketPrice * num) >= 0){
           this.money = this.money - (this.marketPrice * num);
@@ -335,10 +526,69 @@ export default{
         }else{
           nopeAudio.play()
           alert("get your broke ass out this market")
-          console.log('nooooope')
         }
         this.market = null;
       }
+      }
+      
+    },
+    sellAll(item){
+      if(item === 0){
+        if(!(this.appleJuiceCount === 0 && this.grapeJuiceCount === 0)){
+          this.sellAllPrice = (this.appleJuiceCount * 3) + (this.grapeJuiceCount * 5)
+          this.sellConfirm = confirm(`Would you like to sell all of your apple juice and grape juice for ${this.sellAllPrice}$ ? `)
+          if(this.sellConfirm){
+            this.appleJuiceCount = 0;
+            this.grapeJuiceCount = 0;
+            this.money = this.money + this.sellAllPrice;
+            getPaidAudio.play()
+            setTimeout(this.delayedPaid, 750)
+            setTimeout(this.delayedPaid, 1500)
+          }else{
+            sighAudio.play()
+          }
+        }else{
+          nopeAudio.play()
+          alert("You don't have anything")
+        }
+        
+      }else if(item === 1){
+        if(this.appleJuiceCount > 0){
+          this.sellAllPrice = (this.appleJuiceCount * 3) 
+          this.sellConfirm = confirm(`Would you like to sell all of your apple juice for ${this.sellAllPrice}$ ? `)
+          if(this.sellConfirm){
+            this.appleJuiceCount = 0;
+            this.money = this.money + this.sellAllPrice;
+            getPaidAudio.play()
+            setTimeout(this.delayedPaid, 750)
+            setTimeout(this.delayedPaid, 1500)
+          }else{
+            sighAudio.play()
+          }
+        }else{
+          nopeAudio.play()
+          alert("You don't have any apple juice!")
+        }
+
+      }else if(item === 2){
+        if(this.grapeJuiceCount > 0){
+          this.sellAllPrice = (this.grapeJuiceCount * 5)
+          this.sellConfirm = confirm(`Would you like to sell all of your grape juice for ${this.sellAllPrice}$ ? `)
+          if(this.sellConfirm){
+            this.grapeJuiceCount = 0;
+            this.money = this.money + this.sellAllPrice;
+            getPaidAudio.play()
+            setTimeout(this.delayedPaid, 750)
+            setTimeout(this.delayedPaid, 1500)
+          }else{
+            sighAudio.play()
+          }
+        }else{
+          nopeAudio.play()
+          alert("You don't have any apple juice!")
+        }
+      }
+
     },
     sellMultiple(multipleNum){
       if(this.sell === 'appleJuice'){
@@ -361,6 +611,17 @@ export default{
           }
         }
         this.sell = null;
+    },
+    cheatingGame(count){
+      if(this.cheat === 'appleJuice'){
+          this.appleJuiceCount = this.appleJuiceCount + count
+        }else if(this.cheat === 'grapeJuice'){
+          this.grapeJuiceCount = this.grapeJuiceCount + count
+        }else if(this.cheat === 'money'){
+          this.money = this.money + count
+        }
+        this.cheat = null;
+        cheatingAudio.play();
     },
     completeOnlinOrder(){
       if(this.online === '1'){
@@ -403,11 +664,58 @@ export default{
             this.onlineOder();
             
           }
+        }else if(this.online === '4'){
+          if(this.appleJuiceCount < this.apple4 || this.grapeJuiceCount < this.grape4){
+            nopeAudio.play()
+            alert(`You don't have enough items`)
+          }else{
+            this.appleJuiceCount = this.appleJuiceCount - this.apple4;
+            this.grapeJuiceCount = this.grapeJuiceCount - this.grape4;
+            this.money = this.money + this.odds4;
+            honkAudio.play();
+            setTimeout(this.delayedTrack, 900)
+            setTimeout(this.delayedPaid, 3750)
+            this.onlineOder();
+            
+          }
+        }
+        else if(this.online === '5'){
+          if(this.appleJuiceCount < this.apple5 || this.grapeJuiceCount < this.grape5){
+            nopeAudio.play()
+            alert(`You don't have enough items`)
+          }else{
+            this.appleJuiceCount = this.appleJuiceCount - this.apple5;
+            this.grapeJuiceCount = this.grapeJuiceCount - this.grape5;
+            this.money = this.money + this.odds5;
+            honkAudio.play();
+            setTimeout(this.delayedTrack, 900)
+            setTimeout(this.delayedPaid, 3750)
+            this.onlineOder();
+            
+          }
+        }
+        else if(this.online === '6'){
+          if(this.appleJuiceCount < this.apple3 || this.grapeJuiceCount < this.grape6){
+            nopeAudio.play()
+            alert(`You don't have enough items`)
+          }else{
+            this.appleJuiceCount = this.appleJuiceCount - this.apple6;
+            this.grapeJuiceCount = this.grapeJuiceCount - this.grape6;
+            this.money = this.money + this.odds6;
+            honkAudio.play();
+            setTimeout(this.delayedTrack, 900)
+            setTimeout(this.delayedPaid, 3750)
+            this.onlineOder();
+            
+          }
         }
         this.online = null;
     },
     delayedPaid(){
       getPaidALotAudio.play()
+    },
+    delayedMarket(){
+      spendAudio.play()
     },
     delayedTrack(){
       onlineOrderAudio.play()
@@ -420,6 +728,7 @@ export default{
           this.money = this.money - price
           machineAudio.play();
           this.machineCount ++;
+          this.onlineOder()
         }else{
         sighAudio.play()
         }
@@ -430,11 +739,18 @@ export default{
       }
       
     },
+    refresh(){
+      if(this.money >= 5){
+        this.money = this.money -5
+        this.onlineOder();
+      }else{
+        nopeAudio.play()
+      }
+    },
     giveMoney(){
       this.num = Math.random()
       if(this.num <= 0.25){
-        this.money = this.money + 0.2
-        
+        this.money = this.money + 0.25
       }else if(this.num <= 0.5){
         this.money = this.money + 0.5
       }else if(this.num <= 0.75){
@@ -442,6 +758,7 @@ export default{
       }else{
         this.money = this.money + 2
       }
+      
     },
     freeMoney(price){
       this.money = this.money + price
@@ -468,6 +785,52 @@ export default{
         }
         this.mix = null;
     },
+    makeMaxDrink(){
+      if(this.machineCount === 1){
+        this.levelCal = 4
+      }else if(this.machineCount === 2){
+        this.levelCal = 3
+      }else if(this.machineCount === 3){
+        this.levelCal = 2
+      }else if(this.machineCount === 4){
+        this.levelCal = 1
+      }else if(this.machineCount === 5){
+        this.levelCal = 0.5
+      }
+
+      if(this.mix === 'appleJuice'){
+        if(this.appleCount < this.levelCal ){
+          nopeAudio.play();
+          alert(`You need at least ${this.levelCal} apples!`)
+        }else{
+          this.MaxApple =  Math.floor(this.appleCount / this.levelCal)
+          this.MaxConfirm =  confirm(`You are making ${this.MaxApple} apple juice out of ${this.MaxApple * this.levelCal} apples, do you want to continue?`)
+          if(this.MaxConfirm){
+            this.appleJuiceCount = this.appleJuiceCount + this.MaxApple
+            this.appleCount = this.appleCount - (this.MaxApple * this.levelCal);
+            pouringAudio.play();
+          }else{  
+            sighAudio.play();
+          }
+        }
+      }else if(this.mix === 'grapeJuice'){
+        if(this.grapeCount < this.levelCal ){
+          nopeAudio.play();
+          alert(`You need at least ${this.levelCal} grapes!`)
+        }else{
+          this.MaxGrape =  Math.floor(this.grapeCount / this.levelCal)
+          this.MaxConfirm =  confirm(`You are making ${this.MaxGrape} apple juice out of ${this.MaxGrape * this.levelCal} apples, do you want to continue?`)
+          if(this.MaxConfirm){
+            this.grapeJuiceCount = this.grapeJuiceCount+ this.MaxGrape
+            this.grapeCount = this.grapeCount - (this.MaxGrape * this.levelCal);
+            pouringAudio.play();
+          }else{  
+            sighAudio.play();
+          }
+        }
+      }
+        this.mix = null;
+    },
     onlineOder(){
       this.checkCount ++;
       this.randomOdds=  Math.random();
@@ -481,12 +844,25 @@ export default{
         this.randomOdds = 4
       }
 
+      if(this.machineCount === 1){
+        this.levelCal = 4
+      }else if(this.machineCount === 2){
+        this.levelCal = 3
+      }else if(this.machineCount === 3){
+        this.levelCal = 2
+      }else if(this.machineCount === 4){
+        this.levelCal = 1
+      }else if(this.machineCount === 5){
+        this.levelCal = 0.5
+      }
 
       this.randomNum = Math.random();
       this.apple1 = Math.floor((10 * this.randomNum) )
       this.grape1 = 10 - this.apple1;
       this.og1 = (this.apple1 * 3) + (this.grape1 * 5)
       this.odds1 = this.og1 * this.randomOdds
+      this.cost1 = ((this.apple1 * 0.5) + (this.grape1 * 0.75)) * this.levelCal;
+      this.pureProfit1 = this.odds1 - this.cost1;
 
 
 
@@ -495,6 +871,8 @@ export default{
       this.grape2 = 50 - this.apple2;
       this.og2 = (this.apple2 * 3) + (this.grape2 * 5)
       this.odds2 = this.og2 * this.randomOdds
+      this.cost2 = ((this.apple2 * 0.5) + (this.grape2 * 0.75)) * this.levelCal;
+      this.pureProfit2 = this.odds2 - this.cost2;
 
 
 
@@ -503,8 +881,54 @@ export default{
       this.grape3 = 100 - this.apple3;
       this.og3 = (this.apple3 * 3) + (this.grape3 * 5)
       this.odds3 = this.og3 * this.randomOdds
+      this.cost3 = ((this.apple3 * 0.5) + (this.grape3 * 0.75)) * this.levelCal;
+      this.pureProfit3 = this.odds3 - this.cost3;
+
+      this.randomNum = Math.random();
+      this.apple4 = Math.floor((250 * this.randomNum) )
+      this.grape4 = 250 - this.apple4;
+      this.og4 = (this.apple4 * 3) + (this.grape4 * 5)
+      this.odds4 = this.og4 * this.randomOdds
+      this.cost4 = ((this.apple4 * 0.5) + (this.grape4 * 0.75)) * this.levelCal;
+      this.pureProfit4 = this.odds4 - this.cost4;
+
+      this.randomNum = Math.random();
+      this.apple5 = Math.floor((500* this.randomNum) )
+      this.grape5 = 500 - this.apple5;
+      this.og5 = (this.apple5 * 3) + (this.grape5 * 5)
+      this.odds5 = this.og5 * this.randomOdds
+      this.cost5 = ((this.apple5 * 0.5) + (this.grape5 * 0.75)) * this.levelCal;
+      this.pureProfit5 = this.odds5 - this.cost5;
+
+      this.randomNum = Math.random();
+      this.apple6 = Math.floor((1000* this.randomNum) )
+      this.grape6 = 1000 - this.apple6;
+      this.og6 = (this.apple6 * 3) + (this.grape6 * 5)
+      this.odds6 = this.og6 * this.randomOdds
+      this.cost6 = ((this.apple6 * 0.5) + (this.grape6 * 0.75)) * this.levelCal;
+      this.pureProfit6 = this.odds6 - this.cost6;
 
       
+
+      
+    },
+    catering(){
+      if(this.money >= 2000){
+        this.cateringCheck = confirm(`Do you want to unlock the online order with 2000$ ?`)
+        if(this.cateringCheck){
+          this.money = this.money - 2000;
+          this.onlineOder()
+          getPaidAudio.play()
+            setTimeout(this.delayedPaid, 750)
+            setTimeout(this.delayedPaid, 1500)
+        }
+        else{
+          sighAudio.play();
+        }
+      }else{
+        nopeAudio.play();
+        alert(`You need 2000$ to unlock it!`)
+      }
     }
   },
 };
@@ -525,6 +949,12 @@ html {
 }
 .chekDealButton{
   background-color: red;
+  
+}
+
+.moneyButton{
+  background-color: lightsalmon;
+  color: black;
   
 }
 
