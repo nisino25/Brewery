@@ -53,7 +53,8 @@
             <button @click="buyItem(1000)">1000</button>&nbsp;
         </div>
       </form>
-      <button @click="buyMax">Buy Max</button><br><br>
+      <button @click="buyMax('apple')">Buy Max Apple</button>&nbsp;
+      <button @click="buyMax('grape')">Buy Max Grape</button><br><br>
     </div>
 
   </base-container>
@@ -74,8 +75,8 @@
             <label for="mix-grape">Grape juice</label>
           </div>
         </div>
-        <button @click="makeMaxDrink">Make max count out of it</button>
         <br><br>
+        
         <div>
           <div v-if="machineCount === 1">
             <button @click="makeDrink(1,4)">Make 1 from 4</button>&nbsp;
@@ -86,9 +87,6 @@
             <button @click="makeDrink(25,4)">25</button>&nbsp;
             <button @click="makeDrink(50,4)">50</button>&nbsp;
             <button @click="makeDrink(100,4)">100</button>&nbsp;
-            
-            <br><br>
-            <button @click="buyMachine(500)" class="buyList">Unlock the better machine(1 from 3!  500$)</button>
           </div>
           <div v-if="machineCount === 2">
             <button @click="makeDrink(1,3)">Make 1 from 3</button>&nbsp;
@@ -99,9 +97,6 @@
             <button @click="makeDrink(25,3)">25</button>&nbsp;
             <button @click="makeDrink(50,3)">50</button>&nbsp;
             <button @click="makeDrink(100,3)">100</button>&nbsp;
-
-            <br><br>
-            <button  @click="buyMachine(2000)" class="buyList">Unlock the better machine(1 from 2!  2000$)</button>
           </div>
           <div v-if="machineCount === 3">
             <button @click="makeDrink(1,2)">Make 1 from 2</button>&nbsp;
@@ -112,9 +107,6 @@
             <button @click="makeDrink(25,2)">25</button>&nbsp;
             <button @click="makeDrink(50,2)">50</button>&nbsp;
             <button @click="makeDrink(100,2)">100</button>&nbsp;
-
-            <br><br>
-            <button  @click="buyMachine(50000)" class="buyList">Unlock the better machine(1 from 1!  50000$)</button>
           </div>
           <div v-if="machineCount === 4">
             <button @click="makeDrink(1,1)">Make 1 from 1</button>&nbsp;
@@ -125,9 +117,6 @@
             <button @click="makeDrink(25,1)">25</button>&nbsp;
             <button @click="makeDrink(50,1)">50</button>&nbsp;
             <button @click="makeDrink(100,1)">100</button>&nbsp;
-
-            <br><br>
-            <button  @click="buyMachine(100000)" class="buyList">Unlock the better machine(2 from 1!  100000$)</button>
           </div>
           <div v-if="machineCount === 5">
             <button @click="makeDrink(1,0.5)">Make 1 from 0.5</button>&nbsp;
@@ -138,14 +127,20 @@
             <button @click="makeDrink(25,0.5)">25</button>&nbsp;
             <button @click="makeDrink(50,0.5)">50</button>&nbsp;
             <button @click="makeDrink(100,0.5)">100</button>&nbsp;
-
-            <br><br>
-            <button v-if="machineCount === 5"> you rich dude</button>
             <!-- <button  @click="buyMachine(100000)" class="buyList">Unlock the better machine(2 from 1!  100000$)</button> -->
           </div>
           
         </div>
       </form>
+      <button @click="makeMaxDrink('apple')">Make max Apple Juice</button>&nbsp;
+      <button @click="makeMaxDrink('grape')">Make max Grape Juice</button><br><br>
+      <button @click="makeMaxDrink('all')">Make every thing</button><br><br>
+
+      <button @click="buyMachine(500)" class="buyList" v-if="machineCount === 1">Unlock the better machine(1 from 3!  500$)</button>
+      <button  @click="buyMachine(2000)" class="buyList" v-if="machineCount === 2">Unlock the better machine(1 from 2!  2000$)</button>
+      <button  @click="buyMachine(50000)" class="buyList" v-if="machineCount === 3">Unlock the better machine(1 from 1!  50000$)</button>
+      <button  @click="buyMachine(100000)" class="buyList" v-if="machineCount === 4">Unlock the better machine(2 from 1!  100000$)</button>
+      <button v-if="machineCount === 5"> you rich dude</button>
     </div>
   </base-container>
 
@@ -453,45 +448,43 @@ export default{
     toggleDisplayCheatin(){
       this.Cheatingopen = !this.Cheatingopen
     }, 
-    buyMax(){
-      if(this.market !== null){
-        if(this.market === 'apple'){
-          if(this.money >= 0.5){
-            this.marketPrice = 0.5
-            this.MaxMarket = Math.floor(this.money / this.marketPrice)
-            this.confirmMarket = confirm(`Would you like to buy ${this.MaxMarket} ${this.market}  with ${this.MaxMarket * this.marketPrice}$ ?`)
-            if(this.confirmMarket){
-              this.appleCount = this.appleCount + this.MaxMarket
-              this.money = this.money - (this.MaxMarket * this.marketPrice)
-              spendAudio.play()
-              setTimeout(this.delayedMarket, 750)
-              setTimeout(this.delayedMarket, 1500)
+    buyMax(item){
+      if(item === 'apple'){
+        if(this.money >= 0.5){
+          this.marketPrice = 0.5
+          this.MaxMarket = Math.floor(this.money / this.marketPrice)
+          this.confirmMarket = confirm(`Would you like to buy ${this.MaxMarket} apples  with ${this.MaxMarket * this.marketPrice}$ ?`)
+          if(this.confirmMarket){
+            this.appleCount = this.appleCount + this.MaxMarket
+            this.money = this.money - (this.MaxMarket * this.marketPrice)
+            spendAudio.play()
+            setTimeout(this.delayedMarket, 750)
+            setTimeout(this.delayedMarket, 1500)
 
-            }else{
-              sighAudio.play();
-            }
           }else{
-            nopeAudio.play()
-            alert("get your broke ass out this market")
+            sighAudio.play();
           }
-        }else if(this.market === 'grape'){
-          if(this.money >= 0.75){
-            this.marketPrice = 0.75
-            this.MaxMarket = Math.floor(this.money / this.marketPrice)
-            this.confirmMarket = confirm(`Would you like to buy ${this.MaxMarket} ${this.market}  with ${this.MaxMarket * this.marketPrice}$ ?`)
-            if(this.confirmMarket){
-              this.grapeCount = this.grapeCount + this.MaxMarket
-              this.money = this.money - (this.MaxMarket * this.marketPrice)
-              spendAudio.play()
-              setTimeout(this.delayedMarket, 750)
-              setTimeout(this.delayedMarket, 1500)
-            }else{
-              sighAudio.play();
-            }
+        }else{
+          nopeAudio.play()
+          alert("get your broke ass out this market")
+        }
+      }else if(item === 'grape'){
+        if(this.money >= 0.75){
+          this.marketPrice = 0.75
+          this.MaxMarket = Math.floor(this.money / this.marketPrice)
+          this.confirmMarket = confirm(`Would you like to buy ${this.MaxMarket} grapes  with ${this.MaxMarket * this.marketPrice}$ ?`)
+          if(this.confirmMarket){
+            this.grapeCount = this.grapeCount + this.MaxMarket
+            this.money = this.money - (this.MaxMarket * this.marketPrice)
+            spendAudio.play()
+            setTimeout(this.delayedMarket, 750)
+            setTimeout(this.delayedMarket, 1500)
           }else{
-            nopeAudio.play()
-            alert("get your broke ass out this market")
+            sighAudio.play();
           }
+        }else{
+          nopeAudio.play()
+          alert("get your broke ass out this market")
         }
       }
     },  
@@ -785,7 +778,7 @@ export default{
         }
         this.mix = null;
     },
-    makeMaxDrink(){
+    makeMaxDrink(item){
       if(this.machineCount === 1){
         this.levelCal = 4
       }else if(this.machineCount === 2){
@@ -798,7 +791,7 @@ export default{
         this.levelCal = 0.5
       }
 
-      if(this.mix === 'appleJuice'){
+      if(item === 'apple'){
         if(this.appleCount < this.levelCal ){
           nopeAudio.play();
           alert(`You need at least ${this.levelCal} apples!`)
@@ -813,16 +806,34 @@ export default{
             sighAudio.play();
           }
         }
-      }else if(this.mix === 'grapeJuice'){
+      }else if(item === 'grape'){
         if(this.grapeCount < this.levelCal ){
           nopeAudio.play();
           alert(`You need at least ${this.levelCal} grapes!`)
         }else{
           this.MaxGrape =  Math.floor(this.grapeCount / this.levelCal)
-          this.MaxConfirm =  confirm(`You are making ${this.MaxGrape} apple juice out of ${this.MaxGrape * this.levelCal} apples, do you want to continue?`)
+          this.MaxConfirm =  confirm(`You are making ${this.MaxGrape} grape juice out of ${this.MaxGrape * this.levelCal} grapes, do you want to continue?`)
           if(this.MaxConfirm){
             this.grapeJuiceCount = this.grapeJuiceCount+ this.MaxGrape
             this.grapeCount = this.grapeCount - (this.MaxGrape * this.levelCal);
+            pouringAudio.play();
+          }else{  
+            sighAudio.play();
+          }
+        }
+      }else if(item === 'all'){
+        if(!(this.grapeCount > this.levelCal || this.appleCount > this.levelCal)){
+          nopeAudio.play();
+          alert(`You need at least ${this.levelCal} apples or ${this.levelCal} grapes`)
+        }else{
+          this.MaxGrape =  Math.floor(this.grapeCount / this.levelCal)
+          this.MaxApple =  Math.floor(this.appleCount / this.levelCal)
+          this.MaxConfirm =  confirm(`You are making ${this.MaxApple} apple juice out of ${this.MaxApple * this.levelCal} apples, ${this.MaxGrape} grape juice out of ${this.MaxGrape * this.levelCal} grapes, do you want to continue?`)
+          if(this.MaxConfirm){
+            this.grapeJuiceCount = this.grapeJuiceCount+ this.MaxGrape
+            this.grapeCount = this.grapeCount - (this.MaxGrape * this.levelCal);
+            this.appleJuiceCount = this.appleJuiceCount + this.MaxApple
+            this.appleCount = this.appleCount - (this.MaxApple * this.levelCal);
             pouringAudio.play();
           }else{  
             sighAudio.play();
